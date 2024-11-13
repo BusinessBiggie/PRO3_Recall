@@ -1,14 +1,13 @@
-package service;
+package com.example.animalmanagement.service.grpc;
 
 import com.example.ProductGrpc;
 import com.example.ProductOuterClass;
-import com.example.animalmanagement.entities.Product;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class pikoglort
+public class ProductService
 {
 
   private ProductGrpc.ProductBlockingStub getProductApiStub()
@@ -20,7 +19,7 @@ public class pikoglort
     return ProductGrpc.newBlockingStub(managedChannel);
   }
 
-  public ProductOuterClass.PigsResponse getProductById(Long id){
+  public ProductOuterClass.PigsResponse getAllPigsFromProductId(Long id){
     ProductGrpc.ProductBlockingStub productStub = this.getProductApiStub();
 
     ProductOuterClass.GetAllPigIdsFromProductRequest request = ProductOuterClass.GetAllPigIdsFromProductRequest.newBuilder().setProductId(id)
@@ -28,6 +27,17 @@ public class pikoglort
 
     ProductOuterClass.PigsResponse response = productStub.getAllPigIdsFromProduct(request);
     return response;
+  }
+
+  public ProductOuterClass.ProductListResponse getProductsByPigId(long id){
+    ProductGrpc.ProductBlockingStub productStub = this.getProductApiStub();
+
+    ProductOuterClass.GetAllProductsFromPigIdRequest request = ProductOuterClass.GetAllProductsFromPigIdRequest.newBuilder().setPigId(id)
+        .build();
+
+    ProductOuterClass.ProductListResponse response = productStub.getAllProductsFromPigId(request);
+    return response;
+
   }
 
 }

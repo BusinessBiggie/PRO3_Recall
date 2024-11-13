@@ -7,6 +7,7 @@ package com.example;
 service Product {
   rpc GetAllPigIdsFromProduct (GetAllPigIdsFromProductRequest) returns (PigsResponse) {}
   rpc GetAllPartsFromPigId (getPartIdsFromPigIdRequest) returns (PartsResponse) {}
+  rpc GetAllProductsFromPigId (GetAllProductsFromPigIdRequest) returns (ProductListResponse) {}
 }
 
 message Pig {
@@ -27,4 +28,12 @@ message PigsResponse {
 
 message PartsResponse {
   repeated uint64 partId = 1;
+}
+
+message GetAllProductsFromPigIdRequest {
+  uint64  pigId = 1;
+}
+
+message ProductListResponse {
+  repeated uint64 productId = 1;
 }

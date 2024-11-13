@@ -8,22 +8,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-@Entity
-@Table(name = "Pig")
 public class Pig implements Serializable {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "animal_id_seq_generator")
-  @SequenceGenerator(name = "animal_id_seq_generator", sequenceName = "animal_animal_id_seq", allocationSize = 1)
-  @JsonIgnore
   private long animalId;
 
-  @Column(nullable = false)
-  @JsonProperty("weight")
   private BigDecimal weightKilogram;
 
-  @Column(nullable = false)
-  @JsonProperty("name")
   private String name;
 
   // Default no-args constructor, required by JPA

@@ -7,28 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Entity
-@Table(name = "Product")
 public class Product {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
-  @Column(name = "max_weight", nullable = false)
   private BigDecimal maxWeight;
 
-  @Column(name = "is_sent", nullable = false)
   private Boolean sent;
 
-  @Column(name = "current_weight", nullable = false)
   private BigDecimal currentWeight = BigDecimal.ZERO;
 
-  @Column(name = "part_type", nullable = false)
   private String partType;
 
-  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinColumn(name = "product_id")
   private List<PigPart> pigParts = new ArrayList<>();
 
   // Constructors

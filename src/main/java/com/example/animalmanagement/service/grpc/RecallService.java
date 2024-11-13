@@ -1,28 +1,23 @@
-package service;
+package com.example.animalmanagement.service.grpc;
 
 import com.example.ProductOuterClass;
-import com.example.animalmanagement.entities.Pig;
-import com.example.animalmanagement.entities.Product;
-import com.example.animalmanagement.repositories.PigRepository;
-import com.example.animalmanagement.repositories.ProductRepository;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.example.recall.RecallServiceGrpc;
 import com.example.recall.*;
+import net.devh.boot.grpc.server.service.GrpcService;
 
 
-
-@Service
-public class RecallServiceImpl extends RecallServiceGrpc.RecallServiceImplBase {
+@GrpcService
+public class RecallService extends RecallServiceGrpc.RecallServiceImplBase {
 
   @Autowired
-  private pikoglort productServiceClient;
+  private ProductService productServiceClient;
 
   @Override
   public void getAnimalInProduct(RecallRequest request, StreamObserver<RecallResponse> responseObserver) {
     // Call station 3's service to get the product
-    ProductOuterClass.PigsResponse pigs = productServiceClient.getProductById(Long.parseLong(request.getProductId()));
+    ProductOuterClass.PigsResponse pigs = productServiceClient.getAllPigsFromProductId(Long.parseLong(request.getProductId()));
     if (pigs == null) {
       responseObserver.onError(new RuntimeException("Product not found"));
       return;
@@ -31,6 +26,25 @@ public class RecallServiceImpl extends RecallServiceGrpc.RecallServiceImplBase {
     // Collect all pig IDs associated with this product
     RecallResponse.Builder responseBuilder = RecallResponse.newBuilder();
     pigs.getPigsList().forEach(pig -> responseBuilder.addPigIds(Long.toString(pig.getId())));
+    //product.getPigParts().forEach(pigPart -> responseBuilder.addPigIds(String.valueOf(pigPart.getPig().getAnimalId())));
+
+    // Send response
+    responseObserver.onNext(responseBuilder.build());
+    responseObserver.onCompleted();
+  }
+
+  @Override
+  public void getProductsForAnimal(PigRequest request, StreamObserver<ProductResponse> responseObserver) {
+
+    ProductOuterClass.ProductListResponse productIds = productServiceClient.getProductsByPigId(Long.parseLong(request.getPigId()));
+    if (productIds == null) {
+      responseObserver.onError(new RuntimeException("Id not found"));
+      return;
+    }
+
+
+    ProductResponse.Builder responseBuilder = ProductResponse.newBuilder();
+    productIds.getProductIdList().forEach(id -> responseBuilder.addProductIds(Long.toString(id)));
     //product.getPigParts().forEach(pigPart -> responseBuilder.addPigIds(String.valueOf(pigPart.getPig().getAnimalId())));
 
     // Send response
