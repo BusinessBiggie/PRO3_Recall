@@ -80,10 +80,6 @@ public class Product {
     return pigParts;
   }
 
-  public void setPigParts(List<PigPart> pigParts) {
-    this.pigParts = pigParts;
-    updateCurrentWeight();
-  }
 
   public String getPartType() {
     return partType;
@@ -93,32 +89,10 @@ public class Product {
     this.partType = partType;
   }
 
-  // Add a PigPart to the Product if it doesn't exceed the max weight and matches the part type
-  public boolean addPigPartFromTray(PigPart pigPart) {
-    if (!pigPart.getPartName().equalsIgnoreCase(this.partType)) {
-      throw new IllegalArgumentException("Part type mismatch: Product only accepts parts of type " + this.partType);
-    }
-
-
-      BigDecimal partWeight = BigDecimal.valueOf(pigPart.getWeight());
-      if (this.currentWeight.add(partWeight).compareTo(this.maxWeight) <= 0) {
-        this.pigParts.add(pigPart);
-        this.currentWeight = this.currentWeight.add(partWeight);
-        return true;
-      } else {
-        System.out.println("Cannot add PigPart: Exceeds product max weight");
-        return false;
-      }
-    }
 
 
 
-  // Helper method to update current weight when pigParts list changes
-  private void updateCurrentWeight() {
-    this.currentWeight = pigParts.stream()
-        .map(pigPart -> BigDecimal.valueOf(pigPart.getWeight()))
-        .reduce(BigDecimal.ZERO, BigDecimal::add);
-  }
+
 
   // Override equals and hashCode
   @Override

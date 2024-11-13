@@ -1,0 +1,30 @@
+syntax = "proto3";
+//option java_multiple_files = true;
+
+package com.example;
+
+// The service definition.
+service Product {
+  rpc GetAllPigIdsFromProduct (GetAllPigIdsFromProductRequest) returns (PigsResponse) {}
+  rpc GetAllPartsFromPigId (getPartIdsFromPigIdRequest) returns (PartsResponse) {}
+}
+
+message Pig {
+  uint64 id = 1;
+}
+
+message getPartIdsFromPigIdRequest {
+  uint64 pig_id = 1;
+}
+
+message GetAllPigIdsFromProductRequest {
+  uint64 productId = 1;
+}
+
+message PigsResponse {
+  repeated Pig pigs = 1;
+}
+
+message PartsResponse {
+  repeated uint64 partId = 1;
+}
