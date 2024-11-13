@@ -1,0 +1,29 @@
+syntax = "proto3";
+package com.example.recall;
+option java_multiple_files = true;
+
+
+service RecallService {
+  // RPC to retrieve pigs associated with a product
+  rpc GetAnimalInProduct (RecallRequest) returns (RecallResponse);
+
+  // RPC to retrieve products associated with a pig
+  rpc GetProductsForAnimal (PigRequest) returns (ProductResponse);
+}
+
+message RecallRequest {
+  string productId = 1;
+}
+
+message RecallResponse {
+  repeated string pigIds = 1;
+}
+
+message PigRequest {
+  string pigId = 1;
+}
+
+message ProductResponse {
+  repeated string productIds = 1;
+}
+
